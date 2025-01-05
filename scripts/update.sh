@@ -1,6 +1,6 @@
 #! /bin/bash
 
-source .venv/bin/activate
+source .linvenv/bin/activate
 
 python3 -m pip install -r etc/requirements.txt
 
