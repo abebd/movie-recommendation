@@ -14,6 +14,7 @@ if __name__ == '__main__':
     parser.add_argument('--list_new', action='store_true')
     parser.add_argument('--list_alt', action='store_true')
     parser.add_argument('--recommend', action='store_true')
+    parser.add_argument('--excel', action='store_true')
 
     args = parser.parse_args()
 
@@ -33,6 +34,10 @@ if __name__ == '__main__':
 
     if args.recommend == True:
         main.run_recommend()
+
+    if args.excel == True:
+        main.run_sheets()
+        exit()
     
     main.run()
 
