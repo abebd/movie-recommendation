@@ -8,6 +8,7 @@ class InputHandler():
             'get new': 'Fetches more recommended movies',
             'list new': '',
             'list old': '',
+            'list random': '',
             'exit': '',
             'quit': '',
         }
@@ -42,6 +43,9 @@ class InputHandler():
 
         if 'list old' == self.last_user_input:
             self.main.list_movies(type='old')
+
+        if 'list random' == self.last_user_input:
+            self.main.list_movies(type='five random')
 
         if 'exit' == self.last_user_input \
         or 'quit' == self.last_user_input:

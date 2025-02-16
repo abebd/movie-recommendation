@@ -2,9 +2,9 @@ import os
 import shutil
 from datetime import datetime
 
-from movie_recommendation.util import get_secret, remove_files_in_folder, log
-from movie_recommendation.media.moviehandler import MovieHandler
-from movie_recommendation.api.chatbot.chatbothandler import ChatBotHandler
+from movie_recommendation.Util import get_secret, remove_files_in_folder, log
+from movie_recommendation.media.MovieHandler import MovieHandler
+from movie_recommendation.api.chatbot.ChatBotHandler import ChatBotHandler
 from omdbapi.movie_search import GetMovie # type: ignore
 
 class OmdbHandler:
