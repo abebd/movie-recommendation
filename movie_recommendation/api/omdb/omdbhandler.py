@@ -1,6 +1,9 @@
 import os
 import shutil
+import json
 from datetime import datetime
+
+import omdbapi
 
 from movie_recommendation.util import get_secret, remove_files_in_folder, log
 from movie_recommendation.media.moviehandler import MovieHandler
@@ -14,6 +17,22 @@ class OmdbHandler:
         self.api_key = get_secret(file_name='omdb_api.key')
         self.omdb = GetMovie(api_key=self.api_key)
         self.movieh = MovieHandler()
+
+
+    def get_movie_json(self, name):
+        try:
+            return self.omdb.get_movie(title=name)
+
+        except omdbapi.movie_search.GetMovieException as e:
+            print(f'Did not find movie: {name}')
+            return None
+
+
+    def create_movie_dict(self):
+        now = datetime.now()
+        today = now.strftime("%y-%m-%d %H:%M:%S")
+
+        print(self.omdb)
 
 
     def create_movie_md(self, movies):

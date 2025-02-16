@@ -8,6 +8,7 @@ from movie_recommendation.api.chatbot.chatbothandler import ChatBotHandler
 from movie_recommendation.api.omdb.omdbhandler import OmdbHandler
 from movie_recommendation.user.inputhandler import InputHandler
 from movie_recommendation.recommend import Recommend
+from movie_recommendation.api.sheets.sheetshandler import SheetsHandler
 
 class Main:
     def __init__(self):
@@ -16,6 +17,7 @@ class Main:
         self.omdbh = OmdbHandler()
         self.inputh = InputHandler(self)
         self.recommend = Recommend()
+        self.sheets = SheetsHandler()
         self.retry_index = 0
         self.retry_max = 10
 
@@ -30,7 +32,7 @@ class Main:
 
         for movie in random.sample(watched_movies, 5):
             movies_string += movie.get_datapoint('title') + ', '
-            
+
 
         # remove trailing ', '
         movies_string = movies_string[:-2]
@@ -38,17 +40,17 @@ class Main:
         if movies_string == '':
             print('movies_string is empty, can not provide any recomendations')
             return ''
-        
+
         prompt = self.chat.base_movie_prompt % (movies_string)
         response = self.chat.send_prompt(prompt)
-        
+
         new_movies = self.chat.handle_response(response)
 
         if new_movies == None:
             raise("Something went wrong when finding new movies")
-            
+
         #return new_movies
-     
+
         response = self.omdbh.create_movie_md(new_movies)
 
     def list_movies(self, type):
@@ -56,22 +58,22 @@ class Main:
         if type == 'new':
             self.movieh.list_movies(self.movieh.recommendation_folder)
             return
-        
+
         if type == 'old':
             self.movieh.list_movies(self.movieh.movies_folder)
-            return            
+            return
 
     def run_fetch(self):
 
         for self.retry_index in range(self.retry_max):
             try:
                 self.get_movie_recomentations()
-            
+
             except Exception as e:
                 #print_excinfo()
                 traceback.print_exc()
                 continue
-            
+
             else:
                 break
         else:
@@ -79,12 +81,12 @@ class Main:
             print('Something went terribly wrong :)')
 
     def run_userinput(self):
-        
+
         while(True):
 
             self.inputh.get_input()
             self.inputh.handle_input()
-        
+
             #movies = self.get_movie_recomentations()
             #self.omdbh.create_movie_md(movies)
 
@@ -97,5 +99,6 @@ class Main:
     def run_recommend(self):
         self.recommend.run()
 
-    def test(self):
-        print('yoyoyo')
+    def run_sheets(self):
+        self.sheets.parse_file_with_movies()
+
