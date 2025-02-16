@@ -105,7 +105,7 @@ def create_hyperlink(label, url):
     return escape_mask.format(parameters, url, label)
 
 
-def shorten_string(string, max_width=38):
+def shorten_string(string, max_width=39):
 
     if len(string) > max_width:
         index = 0

@@ -1,6 +1,6 @@
 import argparse
 
-from movie_recommendation.main import Main
+from movie_recommendation.Main import Main
 
 if __name__ == '__main__':
 
@@ -34,5 +34,5 @@ if __name__ == '__main__':
     if args.recommend == True:
         main.run_recommend()
     
-    main.run()
+    main.run_userinput()
 

@@ -1,9 +1,11 @@
 import os
+import random
 import chardet
 
 from tabulate import tabulate # type: ignore
-from movie_recommendation.media.movie import Movie
-from movie_recommendation.util import get_time_delta, create_hyperlink, shorten_string, validate_path
+from movie_recommendation.media import StoredMovieCategory
+from movie_recommendation.media.Movie import Movie
+from movie_recommendation.Util import get_time_delta, create_hyperlink, shorten_string, validate_path
 
 class MovieHandler:
 
@@ -96,7 +98,81 @@ class MovieHandler:
 
         return movies
     
+    def fetch_attributes_from_movie(self, file_path):
+        
+        attributes = {}
+        
+        # detect encoding
+        content = ''
+        with open(file_path, 'rb') as f:
+            content = f.read()
 
+        encoding = chardet.detect(content)['encoding']
+
+        with open(file_path, 'r', encoding=encoding) as file:
+            
+            for line in file.readlines():
+                splitted_line = line.split(':', 1)
+
+                if len(splitted_line) != 2:
+                    continue
+
+                attribute, value = splitted_line
+                
+                value = value.replace('"', '')
+                
+                if attribute == 'fetched':
+                    #calculate how old the datapost is
+                    attributes[attribute] = get_time_delta(value.replace('\r', '').rstrip().lstrip())
+                else:
+                    # for the generic ones
+                    attributes[attribute] = shorten_string(value)
+
+        return attributes
+    
+    def list_movies_random(self, folder=''):
+        # make this main list_movies method
+        # BUG: list of attributes is not ordered in the same way everytime
+        
+        files = os.listdir(folder)
+        
+        # create new list of only the 5 randomly chosen files
+        random_files = []
+        li = random.sample(range(1, len(files)), 6)
+           
+        for i in li:
+            random_files.append(files[i])
+            
+        files = random_files
+        print(files)
+        exit
+        
+        attributes_wanted = ['title', 'year', 'plot', 'onlineRating', 'url']
+        movies = []
+        movie_index = 0
+        
+        if len(files) == 0:
+            print('No files to list')
+            return
+        
+        for file_name in files:
+            movie_index+=1
+
+            if movie_index >= 5:
+                continue
+
+            file_path = os.path.join(folder, file_name)
+
+            if os.path.isdir(file_path):
+                continue
+
+            movie_attributes = self.fetch_attributes_from_movie(file_path)
+            filtered_attributes = {key: value for key, value in movie_attributes.items() if key in attributes_wanted}
+            movies.append(filtered_attributes.values())
+
+        print(tabulate(movies, attributes_wanted))
+        
+        
     def list_movies(self, folder=''):
 
         files = os.listdir(folder)
@@ -137,7 +213,7 @@ class MovieHandler:
                 lines = file.readlines()
                 
                 for line in lines:
-                    splitted_line= line.split(':', 1)
+                    splitted_line = line.split(':', 1)
 
                     if len(splitted_line) != 2:
                         continue
