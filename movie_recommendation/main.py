@@ -100,7 +100,5 @@ class Main:
         self.recommend.run()
 
     def run_sheets(self):
-        self.sheets.push_data()
+        self.sheets.parse_file_with_movies()
 
-    def test(self):
-        print('yoyoyo')

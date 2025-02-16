@@ -3,6 +3,8 @@ import shutil
 import json
 from datetime import datetime
 
+import omdbapi
+
 from movie_recommendation.util import get_secret, remove_files_in_folder, log
 from movie_recommendation.media.moviehandler import MovieHandler
 from movie_recommendation.api.chatbot.chatbothandler import ChatBotHandler
@@ -21,8 +23,9 @@ class OmdbHandler:
         try:
             return self.omdb.get_movie(title=name)
 
-        except omdbapi.movie_search.GetMovieException as e: # type: ignore
+        except omdbapi.movie_search.GetMovieException as e:
             print(f'Did not find movie: {name}')
+            return None
 
 
     def create_movie_dict(self):
