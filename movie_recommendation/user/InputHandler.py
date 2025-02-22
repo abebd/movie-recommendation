@@ -53,6 +53,9 @@ class InputHandler():
             
 
     def print_help(self):
-        print('helping...')
 
-    
+        print('Listing availible commands...')
+
+        for val in self.valid_commands:
+            print("  > " + val)
+

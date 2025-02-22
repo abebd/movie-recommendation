@@ -2,6 +2,6 @@
 
 source .venv/bin/activate
 
-python3 ../movie-recommendation 
+python3 ../movie-recommendation --list_random
 
 deactivate

@@ -7,7 +7,6 @@ from movie_recommendation.media.MovieHandler import MovieHandler
 from movie_recommendation.api.chatbot.ChatBotHandler import ChatBotHandler
 from movie_recommendation.api.omdb.OmdbHandler import OmdbHandler
 from movie_recommendation.user.InputHandler import InputHandler
-from movie_recommendation.recommend import Recommend
 
 class Main:
     def __init__(self):
@@ -15,7 +14,6 @@ class Main:
         self.chat = ChatBotHandler()
         self.omdbh = OmdbHandler()
         self.inputh = InputHandler(self)
-        self.recommend = Recommend()
         self.retry_index = 0
         self.retry_max = 10
 
