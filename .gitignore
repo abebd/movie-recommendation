@@ -3,3 +3,4 @@ etc/secrets/*
 tests/test.py
 logs/*
 .venv
+tags

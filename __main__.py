@@ -13,7 +13,7 @@ if __name__ == '__main__':
     parser.add_argument('--fetch', action='store_true')
     parser.add_argument('--list_new', action='store_true')
     parser.add_argument('--list_alt', action='store_true')
-    parser.add_argument('--recommend', action='store_true')
+    parser.add_argument('--list_random', action='store_true')
 
     args = parser.parse_args()
 
@@ -30,9 +30,7 @@ if __name__ == '__main__':
     if args.list_alt == True:
         main.run_list_alt()
         exit()
-
-    if args.recommend == True:
-        main.run_recommend()
     
-    main.run_userinput()
-
+    if args.list_random == True:
+        main.list_movies('five random')
+        exit()

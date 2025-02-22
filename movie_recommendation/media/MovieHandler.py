@@ -144,8 +144,6 @@ class MovieHandler:
             random_files.append(files[i])
             
         files = random_files
-        print(files)
-        exit
         
         attributes_wanted = ['title', 'year', 'plot', 'onlineRating', 'url']
         movies = []
@@ -158,7 +156,7 @@ class MovieHandler:
         for file_name in files:
             movie_index+=1
 
-            if movie_index >= 5:
+            if movie_index > 5:
                 continue
 
             file_path = os.path.join(folder, file_name)
@@ -167,11 +165,17 @@ class MovieHandler:
                 continue
 
             movie_attributes = self.fetch_attributes_from_movie(file_path)
-            filtered_attributes = {key: value for key, value in movie_attributes.items() if key in attributes_wanted}
+            filtered_attributes = {
+                key: value 
+                #simple sort for now, should make it sortable by @attributes
+                for key, value in sorted(
+                    movie_attributes.items()
+                ) 
+                if key in attributes_wanted
+            }
             movies.append(filtered_attributes.values())
-
-        print(tabulate(movies, attributes_wanted))
         
+        print(tabulate(movies, attributes_wanted))
         
     def list_movies(self, folder=''):
 
