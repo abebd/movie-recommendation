@@ -46,7 +46,7 @@ def log(log_path, message):
 
     today = get_current_timestamp()
     date, time = today.split(' ')
-    line = f'{str(index)}, {date}, {time}, {message}'
+    line = f'{str(index)}|{date}|{time}|{message}'
 
     with open(log_path, 'a') as file:
         file.write(f'{line}\n')

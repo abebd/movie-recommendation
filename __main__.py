@@ -1,6 +1,6 @@
 import argparse
 
-from movie_recommendation.Main import Main
+from src.main import Main
 
 if __name__ == '__main__':
 

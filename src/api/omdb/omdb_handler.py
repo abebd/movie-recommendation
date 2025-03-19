@@ -2,9 +2,9 @@ import os
 import shutil
 from datetime import datetime
 
-from movie_recommendation.Util import get_secret, remove_files_in_folder, log
-from movie_recommendation.media.MovieHandler import MovieHandler
-from movie_recommendation.api.chatbot.ChatBotHandler import ChatBotHandler
+from src.util import get_secret, remove_files_in_folder, log
+from src.media.movie_handler import MovieHandler
+from src.api.chatbot.chatbot_handler import ChatBotHandler
 from omdbapi.movie_search import GetMovie # type: ignore
 
 class OmdbHandler:
@@ -17,7 +17,7 @@ class OmdbHandler:
 
 
     def create_movie_md(self, movies):
-        log_file_path = 'logs/recommended_movies.log'
+        log_file_path = 'log/recommended_movies.log'
         now = datetime.now()
         today = now.strftime("%y-%m-%d %H:%M:%S")
         skipped_file_amount = 0

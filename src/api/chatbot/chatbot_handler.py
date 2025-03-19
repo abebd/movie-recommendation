@@ -1,8 +1,8 @@
 import json
 
 from gemini import OpenRouter # type: ignore
-from movie_recommendation.Util import get_secret
-from movie_recommendation.media.Movie import Movie
+from src.util import get_secret
+from src.media.movie import Movie
 
 class ChatBotHandler:
 

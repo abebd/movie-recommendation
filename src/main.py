@@ -3,10 +3,10 @@ import random
 import sys
 import traceback
 
-from movie_recommendation.media.MovieHandler import MovieHandler
-from movie_recommendation.api.chatbot.ChatBotHandler import ChatBotHandler
-from movie_recommendation.api.omdb.OmdbHandler import OmdbHandler
-from movie_recommendation.user.InputHandler import InputHandler
+from src.media.movie_handler import MovieHandler
+from src.api.chatbot.chatbot_handler import ChatBotHandler
+from src.api.omdb.omdb_handler import OmdbHandler
+from src.user.input_handler import InputHandler
 
 class Main:
     def __init__(self):
@@ -52,15 +52,15 @@ class Main:
     def list_movies(self, type):
 
         if type == 'new':
-            self.movieh.list_movies(self.movieh.recommendation_folder)
+            self.movieh.list_movies(self.movieh.recommendation_folder, type)
             return
         
         if type == 'old':
-            self.movieh.list_movies(self.movieh.movies_folder)
+            self.movieh.list_movies(self.movieh.movies_folder, type)
             return            
 
         if type == 'five random':
-            self.movieh.list_movies_random(self.movieh.movies_folder)
+            self.movieh.list_movies(self.movieh.movies_folder, 'random')
             return
 
     def run_fetch(self):

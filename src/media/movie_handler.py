@@ -3,9 +3,9 @@ import random
 import chardet
 
 from tabulate import tabulate # type: ignore
-from movie_recommendation.media import StoredMovieCategory
-from movie_recommendation.media.Movie import Movie
-from movie_recommendation.Util import get_time_delta, create_hyperlink, shorten_string, validate_path
+from src.media import movie_category
+from src.media.movie import Movie
+from src.util import get_time_delta, create_hyperlink, shorten_string, validate_path
 
 class MovieHandler:
 
@@ -130,20 +130,21 @@ class MovieHandler:
 
         return attributes
     
-    def list_movies_random(self, folder=''):
+    def list_movies(self, folder='', list_random=False):
         # make this main list_movies method
         # BUG: list of attributes is not ordered in the same way everytime
         
         files = os.listdir(folder)
         
-        # create new list of only the 5 randomly chosen files
-        random_files = []
-        li = random.sample(range(1, len(files)), 6)
-           
-        for i in li:
-            random_files.append(files[i])
+        if list_random == True:
+            # create new list of only the 5 randomly chosen files
+            random_files = []
+            li = random.sample(range(1, len(files)), 6)
             
-        files = random_files
+            for i in li:
+                random_files.append(files[i])
+                
+            files = random_files
         
         attributes_wanted = ['title', 'year', 'plot', 'onlineRating', 'url']
         movies = []
@@ -177,7 +178,7 @@ class MovieHandler:
         
         print(tabulate(movies, attributes_wanted))
         
-    def list_movies(self, folder=''):
+    def list_movies_old(self, folder=''):
 
         files = os.listdir(folder)
         attributes_wanted = ['title', 'year', 'plot', 'onlineRating', 'url']
@@ -240,107 +241,3 @@ class MovieHandler:
 
 
         print(tabulate(movies, attributes_order))
-
-    
-    def list_moveis_alt(self, folder=''):
-            
-        files = os.listdir(folder)
-        attributes_wanted = ['year', 'plot', 'onlineRating']
-        attributes_order = []
-        movies = []
-        movie_index = 0
-        max_movies = 20
-
-        if len(files) == 0:
-            print('No new files exists')
-            return
-
-        for file_name in files:
-            movie_index+=1
-
-            if movie_index > max_movies:
-               # TODO: this is probably very shitty
-               continue
-
-            file_path = os.path.join(folder, file_name)
-            if os.path.isdir(file_path):
-                continue
-
-            movie = []
-            url = ''
-            last_attribute = ''
-            actors = ''
-            with open(file_path, 'r') as file:
-                lines = file.readlines()
-                
-                for line in lines:
-
-                    if last_attribute == 'actors':
-                        value = line.replace('\n', '')
-                        actors += value[4:] + ', '
-
-                    splitted_line = line.split(':', 1)
-
-                    if len(splitted_line) != 2:
-                        continue
-
-                    attribute, value = splitted_line
-                    last_attribute = attribute
-
-                    if attribute == 'url':
-                        url = value
-
-
-                for line in lines:
-                    splitted_line = line.split(':', 1)
-
-                    if len(splitted_line) != 2:
-                        continue
-
-                    attribute, value = splitted_line
-                    
-                    if attribute == 'fetched':
-                        #calculate how old the datapost is
-                        #delta = get_time_delta(value.replace('\r\n', '').rstrip().lstrip())
-                        #movie.append(delta)
-                        movie.append(value.replace('\r\n'.rstrip().lstrip(), ''))
-                        attributes_order.append(attribute)                        
-
-                    if attribute == 'title':
-                        value = create_hyperlink(label=value.lstrip().rstrip(), url=url)
-                        movie.append(value)
-                        attributes_order.append(attribute)
-
-                    if attribute == 'actors':
-                        value = actors[:-7]
-                        movie.append(value)
-                        attributes_order.append(attribute)
-
-                    # for the generic ones
-                    if attribute in attributes_wanted:
-                        movie.append(value.replace('\r', ''))
-                        attributes_order.append(attribute)
-
-            movies.append(movie)
-            
-            #for i in range(len(movie)):
-            #    print(f'{attributes_order[i]}: {movie[i].replace('\n', '')}')
-
-        #sorted_list = movies.sort(key=lambda x: x[0])
-        movies = sorted(movies, key=lambda x: x[4], reverse=False)
-        
-        i = 0
-        for movie in movies:
-            print('\n')
-
-            for i in range(len(movie)):
-
-                if attributes_order[i] == 'fetched':
-                    print(f'{attributes_order[i]}: {get_time_delta(movie[i].lstrip().rstrip())}')
-                    continue
-
-                cleaned_movie = movie[i].replace('\n', '')
-                print(f'{attributes_order[i]}: {cleaned_movie}')
-
-
-
